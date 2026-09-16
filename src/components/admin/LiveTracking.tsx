@@ -98,7 +98,6 @@ const LiveTracking: React.FC = () => {
 
       // Store backup in memory/state instead of database
       const backupJson = JSON.stringify(backupData, null, 2);
-      console.log('Backup created:', backupName, backupData);
       
       // Offer download of backup
       const blob = new Blob([backupJson], { type: 'application/json' });
@@ -269,7 +268,6 @@ This action cannot be undone.`)) {
         });
         
         setConnectionStatus('connected');
-        console.log('Successfully fetched:', sessionsWithUsers.length, 'sessions');
         
         return sessionsWithUsers as QuizSession[];
         
@@ -286,7 +284,6 @@ This action cannot be undone.`)) {
 
   // Real-time subscription - SIMPLIFIED AND MORE ROBUST
   useEffect(() => {
-    console.log('Setting up real-time subscription...');
     
     const channel = supabase
       .channel('quiz-tracking-realtime')
@@ -298,7 +295,6 @@ This action cannot be undone.`)) {
           table: 'quiz_sessions'
         },
         (payload) => {
-          console.log('Quiz sessions update:', payload);
           queryClient.invalidateQueries({ queryKey: ['quiz-sessions'] });
         }
       )
@@ -310,21 +306,18 @@ This action cannot be undone.`)) {
           table: 'quiz_users'
         },
         (payload) => {
-          console.log('Quiz users update:', payload);
           queryClient.invalidateQueries({ queryKey: ['quiz-sessions'] });
         }
       )
       .subscribe((status) => {
-        console.log('Real-time subscription status:', status);
         if (status === 'SUBSCRIBED') {
-          console.log('✅ Real-time connection established');
+          // Connected successfully
         } else if (status === 'CHANNEL_ERROR') {
           console.error('❌ Real-time connection failed');
         }
       });
 
     return () => {
-      console.log('Cleaning up real-time subscription...');
       supabase.removeChannel(channel);
     };
   }, [queryClient]);
@@ -332,7 +325,6 @@ This action cannot be undone.`)) {
   // Auto cleanup every 3 minutes
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('Running auto cleanup...');
       cleanupInactiveSessions();
     }, 3 * 60 * 1000);
 

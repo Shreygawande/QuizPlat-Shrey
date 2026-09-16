@@ -64,7 +64,6 @@ const Index = () => {
 
         if (!existingUser) {
           // User doesn't exist, create new user
-          console.log("User not found, creating new user");
           const { data: newUser, error: newUserError } = await supabase
             .from('quiz_users')
             .insert([{ 
@@ -217,7 +216,6 @@ const Index = () => {
 
       // Save result to Supabase with enhanced error handling
       try {
-        console.log("Saving quiz result for:", quizSession?.email);
         
         const { data: user, error: userError } = await supabase
           .from('quiz_users')
@@ -236,8 +234,6 @@ const Index = () => {
           return;
         }
 
-        console.log("User found, saving result with user_id:", user.id);
-
         // Mark user as completed first
         const { error: updateError } = await supabase
           .from('quiz_users')
@@ -251,7 +247,6 @@ const Index = () => {
           console.error("Error updating user completion status:", updateError);
         }
 
-        console.log("Inserting quiz result...");
         const { data: resultData, error: resultError } = await supabase
           .from('quiz_results')
           .insert([
@@ -270,8 +265,6 @@ const Index = () => {
         if (resultError) {
           console.error("Error saving quiz result:", resultError);
           alert("Error saving quiz result. Please contact support.");
-        } else {
-          console.log("Quiz result saved successfully:", resultData);
         }
       } catch (error) {
         console.error("Unexpected error:", error);

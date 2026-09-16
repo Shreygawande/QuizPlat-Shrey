@@ -103,7 +103,7 @@ const QuizTake = () => {
   const enterFullscreen = () => {
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen().catch((err) => {
-        console.log('Fullscreen request failed:', err);
+        // Fullscreen request failed - silently handled
       });
     }
   };

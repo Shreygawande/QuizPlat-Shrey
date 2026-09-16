@@ -61,7 +61,6 @@ export const AntiCheatProvider: React.FC<AntiCheatProviderProps> = ({
         user_agent: navigator.userAgent,
         session_id: `${userEmail}_${Date.now()}`
       });
-      console.log(`Cheating event logged: ${eventType} - ${description}`);
     } catch (error) {
       console.error('Failed to log cheating event:', error);
     }
@@ -95,7 +94,6 @@ export const AntiCheatProvider: React.FC<AntiCheatProviderProps> = ({
         const el: any = document.documentElement as any;
         if (!document.fullscreenElement && el.requestFullscreen) {
           await el.requestFullscreen();
-          console.log('Forced fullscreen for auto-submit');
         }
       } catch (error) {
         console.warn('Could not force fullscreen for auto-submit:', error);
@@ -178,7 +176,6 @@ export const AntiCheatProvider: React.FC<AntiCheatProviderProps> = ({
       if (isWithinGracePeriod() || isProcessingViolationRef.current) return;
       
       if (document.hidden) {
-        console.log('Tab switch detected. Current warnings:', tabSwitchWarnings);
         
         if (tabSwitchWarnings === 0) {
           setTabSwitchWarnings(1);
@@ -200,7 +197,6 @@ export const AntiCheatProvider: React.FC<AntiCheatProviderProps> = ({
       // Additional check to avoid false positives from dialog boxes
       setTimeout(() => {
         if (!document.hasFocus() && isActive && !isProcessingViolationRef.current) {
-          console.log('Window blur detected. Current warnings:', tabSwitchWarnings);
           
           if (tabSwitchWarnings === 0) {
             setTabSwitchWarnings(1);
@@ -219,7 +215,6 @@ export const AntiCheatProvider: React.FC<AntiCheatProviderProps> = ({
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (!isActive || isProcessingViolationRef.current) return;
       
-      console.log('Before unload detected. Current warnings:', tabSwitchWarnings);
       
       if (tabSwitchWarnings === 0) {
         setTabSwitchWarnings(1);
